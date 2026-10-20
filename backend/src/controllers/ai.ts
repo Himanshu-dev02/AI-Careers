@@ -33,7 +33,7 @@ export const analyseResume = TryCatch(
     }
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: [
         {
           role: "user",
@@ -111,7 +111,7 @@ export const jobMatcher = TryCatch(async (req: AuthenticatedRequest, res) => {
   }
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-3.8-flash",
     contents: [{ role: "user", parts }],
   });
 
@@ -179,7 +179,7 @@ export const generateInterview = TryCatch(
     }
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: [{ role: "user", parts }],
     });
 
@@ -245,7 +245,7 @@ export const buildResume = TryCatch(async (req: AuthenticatedRequest, res) => {
   }
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-3.8-flash",
     contents: [{ role: "user", parts }],
   });
 

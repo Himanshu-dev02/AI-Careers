@@ -7,7 +7,7 @@ import paymentRoutes from "./routes/payment.js";
 import cors from "cors";
 import Razorpay from "razorpay";
 import axios from "axios";
-const url = `https://ai-career-backend-q7xn.onrender.com`;
+const url = `http://localhost:5173`;
 const interval = 30000;
 function reloadWebsite() {
     axios

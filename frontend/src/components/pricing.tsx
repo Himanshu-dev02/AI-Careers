@@ -4,7 +4,7 @@ import { plans } from "../utils";
 import { useState } from "react";
 import { CheckCircle, Shield } from "lucide-react";
 import axios from "axios";
-import { server } from "../main";
+import { server } from "../config";
 import toast from "react-hot-toast";
 
 declare global {
@@ -102,10 +102,10 @@ function PlanCTA({
     );
 
     const options = {
-      key: "rzp_test_RaL8PDo9YBejEW", // Enter the Key ID generated from the Dashboard
-      amount: order.id, // Amount is in currency subunits.
+      key: "rzp_test_TovcTKqRgFKmZQ", // Enter the Key ID generated from the Dashboard
+      amount: order.amount, // Amount is in currency subunits.
       currency: "INR",
-      name: "Career AI", //your business name
+      name: "AI-Careers", //your business name
       description: "Find job easily",
       order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
 

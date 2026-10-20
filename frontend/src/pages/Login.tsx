@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
 import axios from "axios";
-import { server } from "../main";
+import { server } from "../config";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
 import { features } from "../utils";

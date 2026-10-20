@@ -12,7 +12,7 @@ import {
   Upload,
   Users,
 } from "lucide-react";
-import { server } from "../main";
+import { server } from "../config";
 import axios from "axios";
 import { downloadInterview, toBase64 } from "../utils";
 

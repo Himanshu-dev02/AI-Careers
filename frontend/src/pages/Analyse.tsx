@@ -9,7 +9,7 @@ import {
   toBase64,
 } from "../utils";
 import axios from "axios";
-import { server } from "../main";
+import { server } from "../config";
 import {
   AlertCircle,
   CheckCircle2,

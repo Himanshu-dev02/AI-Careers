@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { Job } from "../types";
 import { matchBg, matchColor, toBase64 } from "../utils";
 import axios from "axios";
-import { server } from "../main";
+import { server } from "../config";
 import {
   AlertCircle,
   Briefcase,
