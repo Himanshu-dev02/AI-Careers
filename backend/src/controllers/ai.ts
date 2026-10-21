@@ -63,7 +63,7 @@ export const analyseResume = TryCatch(
       jsonResponse = JSON.parse(rawText);
     } catch (error) {
       return res.status(500).json({
-        message: "Ai returned invailed Json",
+        message: "Ai returned invalid Json",
         rawResponse: response.text,
       });
     }
@@ -128,7 +128,7 @@ export const jobMatcher = TryCatch(async (req: AuthenticatedRequest, res) => {
     jsonResponse = JSON.parse(rawText);
   } catch (error) {
     return res.status(500).json({
-      message: "Ai returned invailed Json",
+      message: "Ai returned invalid Json",
       rawResponse: response.text,
     });
   }
@@ -196,7 +196,7 @@ export const generateInterview = TryCatch(
       jsonResponse = JSON.parse(rawText);
     } catch (error) {
       return res.status(500).json({
-        message: "Ai returned invailed Json",
+        message: "Ai returned invalid Json",
         rawResponse: response.text,
       });
     }
