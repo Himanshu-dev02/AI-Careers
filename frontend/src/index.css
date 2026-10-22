@@ -1,12 +1,34 @@
 @import "tailwindcss";
 
+/* Brand palette: remaps the existing indigo/emerald classes used across the
+   app, so every page picks up the new theme without touching components.
+   indigo -> violet, emerald -> cyan. Success/error semantics stay readable. */
+@theme {
+  --color-indigo-50: #f5f3ff;
+  --color-indigo-400: #a78bfa;
+  --color-indigo-500: #8b5cf6;
+  --color-indigo-600: #7c3aed;
+  --color-emerald-400: #22d3ee;
+  --color-emerald-500: #06b6d4;
+  --color-fuchsia-400: #e879f9;
+}
+
+:root {
+  --ink: #090612;
+  --violet: #8b5cf6;
+  --fuchsia: #e879f9;
+  --cyan: #22d3ee;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 @layer base {
   * {
     @apply box-border m-0 p-0;
   }
   body {
     font-family: "DM Sans", sans-serif;
-    @apply bg-[#080b14] text-white antialiased;
+    background-color: var(--ink);
+    @apply text-white antialiased;
   }
   h1,
   h2,
@@ -16,86 +38,228 @@
   html {
     scroll-behavior: smooth;
   }
+  ::selection {
+    background: rgba(139, 92, 246, 0.45);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--violet), var(--fuchsia));
+    border-radius: 999px;
+    border: 2px solid var(--ink);
+  }
 }
 
 @layer components {
-  /* ── Page background ── */
+  /* ── Page background: living aurora + drifting grid ── */
   .bg-page {
-    @apply min-h-screen bg-[#080b14] relative;
-    background-image: radial-gradient(
-        ellipse 80% 60% at 50% -10%,
-        rgba(99, 102, 241, 0.18) 0%,
+    @apply min-h-screen relative;
+    background-color: var(--ink);
+    isolation: isolate;
+    overflow-x: clip;
+  }
+  .bg-page::before {
+    content: "";
+    position: fixed;
+    inset: -10%;
+    z-index: -2;
+    pointer-events: none;
+    background: radial-gradient(
+        40% 45% at 18% 25%,
+        rgba(139, 92, 246, 0.38),
         transparent 70%
       ),
       radial-gradient(
-        ellipse 50% 40% at 80% 80%,
-        rgba(16, 185, 129, 0.1) 0%,
-        transparent 60%
+        34% 40% at 82% 18%,
+        rgba(232, 121, 249, 0.24),
+        transparent 70%
       ),
       radial-gradient(
-        ellipse 40% 30% at 10% 70%,
-        rgba(139, 92, 246, 0.1) 0%,
-        transparent 60%
+        38% 40% at 65% 80%,
+        rgba(34, 211, 238, 0.18),
+        transparent 70%
       );
+    filter: blur(50px);
+    will-change: transform;
+    animation: aurora 20s ease-in-out infinite alternate;
+  }
+  .bg-page::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.04) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 75% 60% at 50% 0%,
+      #000 20%,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      ellipse 75% 60% at 50% 0%,
+      #000 20%,
+      transparent 78%
+    );
+    animation: gridDrift 40s linear infinite;
   }
 
   /* ── Glass card ── */
   .glass-card {
-    @apply bg-white/4 border border-white/8 rounded-2xl backdrop-blur-xl;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-      0 32px 64px rgba(0, 0, 0, 0.4);
+    @apply relative rounded-2xl backdrop-blur-xl;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.02)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      0 30px 60px -24px rgba(0, 0, 0, 0.6);
+    transition: border-color 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  .glass-card:hover {
+    border-color: rgba(167, 139, 250, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 30px 60px -24px rgba(0, 0, 0, 0.6),
+      0 0 48px -12px rgba(139, 92, 246, 0.5);
   }
 
-  /* ── Primary CTA button ── */
+  /* ── Primary CTA: flowing gradient + shimmer on hover ── */
   .btn-primary {
-    @apply bg-linear-to-r from-indigo-500 to-emerald-400
-           text-white font-semibold cursor-pointer
-           hover:opacity-90 active:opacity-80
-           transition-all duration-200;
-    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.35);
+    @apply relative overflow-hidden text-white font-semibold cursor-pointer
+           inline-flex items-center justify-center;
+    background-image: linear-gradient(
+      110deg,
+      #8b5cf6,
+      #e879f9,
+      #22d3ee,
+      #8b5cf6
+    );
+    background-size: 200% 100%;
+    animation: flow 9s linear infinite;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 10px 30px -10px rgba(139, 92, 246, 0.75);
+    transition: transform 0.25s var(--ease-out), box-shadow 0.3s;
+  }
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .btn-primary:hover:not(:disabled)::after {
+    transform: translateX(120%);
+    transition: transform 0.8s var(--ease-out);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 16px 36px -10px rgba(232, 121, 249, 0.65);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+  .btn-primary:disabled {
+    @apply cursor-not-allowed opacity-60;
+    animation-play-state: paused;
   }
 
   /* ── Google login button ── */
   .btn-google {
     @apply flex items-center justify-center gap-3 w-full px-6 py-3.5
            bg-white/6 hover:bg-white/10 active:bg-white/4
-           border border-white/12 hover:border-white/22
            rounded-xl text-white font-medium text-[15px] tracking-wide
-           transition-all duration-200 cursor-pointer select-none;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+           cursor-pointer select-none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.25s var(--ease-out), border-color 0.25s,
+      background-color 0.25s, box-shadow 0.3s;
+  }
+  .btn-google:hover {
+    transform: translateY(-2px);
+    border-color: rgba(167, 139, 250, 0.6);
+    box-shadow: 0 12px 30px -12px rgba(139, 92, 246, 0.6);
   }
 
-  /* ── Gradient text ── */
+  /* ── Animated gradient text ── */
   .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #a5b4fc 0%, #6ee7b7 100%);
+    background-image: linear-gradient(
+      110deg,
+      #c4b5fd,
+      #f0abfc,
+      #67e8f9,
+      #c4b5fd
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: flow 10s linear infinite;
   }
 
-  /* ── Divider ── */
   .divider-subtle {
-    @apply border-t border-white/6 w-full;
+    @apply w-full;
+    border-top: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        transparent,
+        rgba(167, 139, 250, 0.4),
+        transparent
+      )
+      1;
   }
 
-  /* ── Background orb blobs ── */
+  /* ── Floating background orbs ── */
   .orb {
     @apply absolute rounded-full pointer-events-none blur-3xl opacity-20;
+    animation: float 16s ease-in-out infinite alternate;
   }
 
   /* ── Small badge pills ── */
   .feature-pill {
-    @apply flex items-center gap-1.5 text-xs text-white/40 bg-white/4
-           border border-white/[0.07] rounded-full px-3 py-1;
+    @apply flex items-center gap-1.5 text-xs text-white/60
+           rounded-full px-3 py-1 backdrop-blur;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   /* ── Form input ── */
   .input-field {
-    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5
-           text-sm text-white placeholder:text-white/25 outline-none
-           focus:border-indigo-500/50 transition-colors;
+    @apply w-full bg-white/5 rounded-xl px-4 py-2.5 text-sm text-white
+           placeholder:text-white/25 outline-none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
+  }
+  .input-field:focus {
+    border-color: rgba(167, 139, 250, 0.7);
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
   }
 }
 
-/* ── Animations ── */
+/* ── Keyframes ── */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -114,9 +278,71 @@
     transform: translateY(0);
   }
 }
+@keyframes aurora {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(4%, -5%, 0) scale(1.18) rotate(6deg);
+  }
+}
+@keyframes gridDrift {
+  to {
+    background-position: 56px 56px;
+  }
+}
+@keyframes flow {
+  to {
+    background-position: 200% 0;
+  }
+}
+@keyframes float {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(24px, -32px, 0);
+  }
+}
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.6s ease both;
 }
 .animate-slide-up {
-  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slideUp 0.7s var(--ease-out) both;
+}
+.animate-float {
+  animation: float 7s ease-in-out infinite alternate;
+}
+
+/* Cards ease in as they scroll into view (supported browsers only) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .glass-card:not(.animate-slide-up) {
+      animation: revealUp linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
