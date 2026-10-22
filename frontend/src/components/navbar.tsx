@@ -7,7 +7,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { isAuth, user } = useAppData();
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 border-b border-white/6 bg-[#080b14]/80 backdrop-blur-xl">
+    <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 border-b border-white/6 bg-[#090612]/80 backdrop-blur-xl">
       <Link to={"/"} className="flex items-center gap-2.5">
         <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-emerald-400 flex caret-indigo-50 justify-center shadow-lg shadow-indigo-500/30 text-2xl">
           📚
@@ -83,7 +83,7 @@ const Navbar = () => {
       </button>
 
       {open && (
-        <div className="absolute top-full inset-x-0 bg-[#080b14]/95 backdrop-blur-xl border-b border-white/6 flex flex-col gap-4 px-6 py-6 md:hidden">
+        <div className="absolute top-full inset-x-0 bg-[#090612]/95 backdrop-blur-xl border-b border-white/6 flex flex-col gap-4 px-6 py-6 md:hidden">
           <Link to={"/analyse"} className="hover:text-white transition-colors">
             Analyse
           </Link>

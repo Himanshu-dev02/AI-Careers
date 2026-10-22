@@ -25,8 +25,9 @@ export function ScoreRing({ score }: { score: number }) {
       />
       <defs>
         <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#6366f1" />
-          <stop offset="100%" stopColor="#34d399" />
+          <stop offset="0%" stopColor="#8b5cf6" />
+          <stop offset="55%" stopColor="#e879f9" />
+          <stop offset="100%" stopColor="#22d3ee" />
         </linearGradient>
       </defs>
     </svg>
