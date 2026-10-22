@@ -66,8 +66,9 @@ function Hero() {
         First 3 analyses free • No credit card required
       </p>
 
+      <div className="mt-16 animate-float">
       <div
-        className="mt-16 glass-card px-8 py-5 flex items-center gap-6 animate-slide-up"
+        className="glass-card px-8 py-5 flex items-center gap-6 animate-slide-up"
         style={{ animationDelay: "0.3s" }}
       >
         <div className="flex flex-col items-center">
@@ -87,12 +88,13 @@ function Hero() {
             ✓ Strong keywords detected
           </span>
           <span className="text-xs text-yellow-400 font-medium">
-            ⚠️ Missing: qauntified impact
+            ⚠️ Missing: quantified impact
           </span>
           <span className="text-xs text-white/40 font-medium">
             3 job matches found
           </span>
         </div>
+      </div>
       </div>
     </section>
   );
