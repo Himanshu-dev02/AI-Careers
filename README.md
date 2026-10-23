@@ -1,13 +1,11 @@
 <div align="center">
-
 # 🚀 NextRole AI
-
+ 
 ### The AI-powered career copilot that takes you from **resume → offer letter**
-
+ 
 Analyse your resume against ATS systems, discover roles that actually fit, generate a recruiter-ready resume, and rehearse interviews — all in one full-stack platform.
-
+ 
 <br/>
-
 ![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
@@ -17,16 +15,18 @@ Analyse your resume against ATS systems, discover roles that actually fit, gener
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)
 ![Razorpay](https://img.shields.io/badge/Razorpay-0C2451?style=for-the-badge&logo=razorpay&logoColor=white)
-
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+ 
 [✨ Features](#-features) •
 [🏗️ Architecture](#️-architecture) •
 [🧰 Tech Stack](#-tech-stack) •
 [⚡ Getting Started](#-getting-started) •
+[🐳 Docker](#-run-with-docker) •
 [🔌 API](#-api-reference) •
 [🗺️ Roadmap](#️-roadmap)
-
+ 
 </div>
-
 ---
 
 ## 📌 Overview
@@ -111,6 +111,26 @@ sequenceDiagram
         F-->>U: Score rings, cards, downloadable report
     end
 ```
+### 🐳 Container topology
+ 
+```mermaid
+flowchart LR
+    BR["🌐 Browser<br/>localhost:5173"]
+ 
+    subgraph DC["🐳 Docker Compose"]
+        FE["frontend<br/>Nginx serves the Vite build<br/>container :80"]
+        BE["backend<br/>Node 22 · Express 5<br/>container :5000"]
+        MG[("mongo 7<br/>optional · profile local-db")]
+    end
+ 
+    ATLAS[("🍃 MongoDB Atlas")]
+ 
+    BR -->|static app| FE
+    BR -->|REST + JWT| BE
+    BE -.->|MONGO_URI| MG
+    BE -.->|MONGO_URI| ATLAS
+```
+ 
 
 ---
 
@@ -122,6 +142,7 @@ sequenceDiagram
 - **Secure payments** — orders are created server-side; on completion the **HMAC-SHA256 signature is verified** with the Razorpay secret before the subscription expiry is written.
 - **Auth done properly** — Google OAuth authorization-code flow → JWT; every AI and payment route sits behind an `isAuth` middleware; frontend uses `ProtectedRoutes` / `PublicRoutes` guards.
 - **Zero-server exports** — resume and interview PDFs are generated entirely in the browser with **jsPDF** (lazy-loaded to keep the initial bundle small).
+- **Containerised with multi-stage Docker builds** — TypeScript is compiled in a build stage and only the production output ships; the React app is built by Vite and served by **Nginx** with SPA routing and long-lived asset caching. `docker compose up --build` starts the whole stack.
 - **End-to-end TypeScript** — shared domain models (`Analysis`, `ResumeData`, `InterviewData`, `Job`) typed on the client; typed Express request extensions on the server.
 
 ---
@@ -142,13 +163,17 @@ sequenceDiagram
 - Google OAuth (`googleapis`), JSON Web Tokens
 - Razorpay SDK
 
+**DevOps**
+- Docker (multi-stage builds), Docker Compose
+- Nginx (static hosting + SPA fallback)
 ---
 
 ## 📁 Project Structure
-
 ```
 AI-Careers/
+├── docker-compose.yml       # frontend + backend (+ optional local Mongo)
 ├── backend/
+│   ├── Dockerfile           # multi-stage: tsc build → slim runtime
 │   └── src/
 │       ├── config/          # db, Google OAuth client, Gemini prompt templates
 │       ├── controllers/     # ai · user · payment
@@ -157,42 +182,40 @@ AI-Careers/
 │       ├── routes/          # /api/ai · /api/user · /api/payment
 │       └── index.ts         # app entry
 └── frontend/
+    ├── Dockerfile           # multi-stage: Vite build → Nginx
+    ├── nginx.conf           # SPA fallback + asset caching
     └── src/
         ├── components/      # navbar, hero, features, pricing, route guards…
         ├── context/         # AppContext (auth + user state)
         ├── pages/           # Home, Login, Analyse, JobMatcher,
         │                    # BuildResume, Interview, Account
+        ├── config.ts        # API base URL (VITE_SERVER)
+        ├── index.css        # theme, animations, design tokens
         ├── types.ts         # shared TypeScript models
         └── utils.ts         # plans, PDF/report generators, helpers
 ```
-
+ 
 ---
-
+ 
 ## ⚡ Getting Started
-
+ 
 ### Prerequisites
-- Node.js 20+
-- A MongoDB database (local or Atlas)
-- [Google Cloud OAuth credentials](https://console.cloud.google.com/apis/credentials)
+- **Docker Desktop** *(recommended)*, **or** Node.js 20+
+- A MongoDB database (Atlas, or the optional local container)
+- [Google Cloud OAuth credentials](https://console.cloud.google.com/apis/credentials) — a **Web application** client with `http://localhost:5173` added under *Authorized JavaScript origins*
 - A [Gemini API key](https://aistudio.google.com/app/apikey)
 - A [Razorpay](https://razorpay.com/) account (test mode is fine)
-
 ### 1. Clone
-
+ 
 ```bash
-git clone https://github.com/<your-username>/NextRole-AI.git
-cd NextRole-AI/AI-Careers
+git clone https://github.com/Himanshu-dev02/AI-Careers.git
+cd AI-Careers
 ```
-
-### 2. Backend
-
-```bash
-cd backend
-npm install
-```
-
-Create `backend/.env`:
-
+ 
+### 2. Configure environment
+ 
+**`backend/.env`** — secrets, read by the API:
+ 
 ```env
 PORT=5000
 MONGO_URI=<your-mongodb-connection-string>
@@ -203,25 +226,72 @@ API_KEY_GEMINI=<your-gemini-api-key>
 Razorpay_Key=<your-razorpay-key-id>
 Razorpay_Secret=<your-razorpay-key-secret>
 ```
-
-```bash
-npm run build
-npm start          # or: npm run dev  (watch mode)
+ 
+**Frontend variables** — public values, baked into the build by Vite:
+ 
+```env
+VITE_SERVER=http://localhost:5000
+VITE_GOOGLE_CLIENT_ID=<same-client-id-as-GOOGLE_CLIENT_ID>
 ```
-
-### 3. Frontend
-
+ 
+- With **Docker**, put these in a `.env` file in the **project root** (next to `docker-compose.yml`).
+- Running **manually**, put them in `frontend/.env`.
+- The Razorpay **Key ID** used by the checkout is set in `frontend/src/components/pricing.tsx`. It must be the same key as `Razorpay_Key` in the backend.
+> 🔒 **Never commit `.env` files.** Rotate any key that has ever been pushed to a public repository.
+ 
+### 3. Run it
+ 
+**Option A — Docker (recommended)** — see [Run with Docker](#-run-with-docker):
+ 
 ```bash
-cd ../frontend
+docker compose up --build
+```
+ 
+**Option B — manually**
+ 
+```bash
+# terminal 1 — backend
+cd backend
+npm install
+npm run dev          # tsc --watch + node --watch  (or: npm run build && npm start)
+ 
+# terminal 2 — frontend
+cd frontend
 npm install
 npm run dev
 ```
-
-Set the API base URL (`server`) and your Google OAuth client ID to match your environment, then open **http://localhost:5173**.
-
-> 🔒 **Never commit `.env` files.** Rotate any key that has ever been pushed to a public repository.
-
+ 
+Open **http://localhost:5173**.
+ 
 ---
+ 
+## 🐳 Run with Docker
+ 
+One command starts the whole stack. Both images use **multi-stage builds**, so the final containers carry only what they need to run.
+ 
+| Service    | Image                                 | URL                     |
+|------------|---------------------------------------|-------------------------|
+| `frontend` | Vite build served by `nginx:alpine`   | http://localhost:5173   |
+| `backend`  | `node:22-slim`, compiled TypeScript   | http://localhost:5000   |
+ 
+ 
+```bash
+# 1. create backend/.env and the root .env (see "Configure environment")
+ 
+# 2. build and start
+docker compose up --build
+```
+ 
+**Use a local MongoDB instead of Atlas**
+ 
+```bash
+# in backend/.env
+MONGO_URI=mongodb://mongo:27017/ai-careers
+ 
+docker compose --profile local-db up --build
+```
+ 
+Data is kept in the `mongo-data` volume.
 
 ## 🔌 API Reference
 
@@ -274,6 +344,7 @@ All routes except `/api/user/login` require `Authorization: Bearer <JWT>`.
 - [ ] Rate limiting, request validation (Zod) and Razorpay webhooks
 - [ ] Multiple resume templates and DOCX export
 - [ ] Dockerised deployment + CI pipeline
+- [ ] Health-check endpoint and container healthchecks
 - [ ] Unit & integration tests
 
 ---
