@@ -49,7 +49,7 @@ const Login = () => {
             📚
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-gradient">
-            CareerAI
+            NextRole-AI
           </h1>
           <p className="text-white/40 text-sm leading-relaxed text-gradient">
             Your AI-powered career co-poilet - build, analyse, and land your

@@ -1,0 +1,38 @@
+services:
+  backend:
+    build: ./backend
+    container_name: nextrole-backend
+    env_file: ./backend/.env
+    environment:
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_SERVER: ${VITE_SERVER:-http://localhost:5000}
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
+        VITE_RAZORPAY_KEY: ${VITE_RAZORPAY_KEY}
+    container_name: nextrole-frontend
+    ports:
+      - "5173:80"   # keeps http://localhost:5173 so your Google OAuth origin still works
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Optional local database: docker compose --profile local-db up --build
+  mongo:
+    image: mongo:7
+    container_name: nextrole-mongo
+    profiles: ["local-db"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

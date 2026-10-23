@@ -8,7 +8,7 @@ import {
 } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import type { AppContextType, User } from "../types";
-import { server } from "../main";
+import { server } from "../config";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 

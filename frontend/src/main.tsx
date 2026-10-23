@@ -5,12 +5,12 @@ import App from "./App.tsx";
 import { AppProvider } from "./context/AppContext.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-export const server = "http://localhost:5000";
+ 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AppProvider>
-      <GoogleOAuthProvider clientId="988287621919-sq8rnlhndob19rutjemhh2ff0j32b29i.apps.googleusercontent.com">
+     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <App />
       </GoogleOAuthProvider>
     </AppProvider>

@@ -22,7 +22,7 @@ const CTABanner = () => {
           <span className="text-gradient">waiting for you.</span>
         </h2>
         <p className="text-white/40 mb-8 relative z-10">
-          Join thousands of job seekers using CareerAI to get hired faster.
+          Join thousands of job seekers using NextRoleAI to get hired faster.
         </p>
         <Link
           to={"/analyse"}
