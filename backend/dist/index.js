@@ -6,7 +6,7 @@ import aiRoutes from "./routes/ai.js";
 import paymentRoutes from "./routes/payment.js";
 import cors from "cors";
 import Razorpay from "razorpay";
-const url = `http://localhost:5000`;
+const url = `https://ai-careers-l0gi.onrender.com`;
 const interval = 30000;
 dotenv.config();
 connectDB().then(() => console.log("DB connected"));
