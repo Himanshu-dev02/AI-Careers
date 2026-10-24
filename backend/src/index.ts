@@ -8,7 +8,7 @@ import cors from "cors";
 import Razorpay from "razorpay";
 import axios from "axios";
 
-const url = `http://localhost:5000`;
+const url = `https://ai-careers-l0gi.onrender.com`;
 const interval = 30000;
 
 function reloadWebsite() {

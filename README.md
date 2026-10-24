@@ -1,8 +1,10 @@
+ 
 <div align="center">
+
 # 🚀 NextRole AI
- 
+
 ### The AI-powered career copilot that takes you from **resume → offer letter**
- 
+
 Analyse your resume against ATS systems, discover roles that actually fit, generate a recruiter-ready resume, and rehearse interviews — all in one full-stack platform.
  
 <br/>
