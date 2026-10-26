@@ -5,6 +5,8 @@
 
 ### The AI-powered career copilot that takes you from **resume → offer letter**
 
+![Hero Cover](./frontend/src/assets/Hero%201.png)
+
 Analyse your resume against ATS systems, discover roles that actually fit, generate a recruiter-ready resume, and rehearse interviews — all in one full-stack platform.
  
 <br/>
@@ -43,6 +45,11 @@ Job hunting is noisy: resumes get filtered by ATS bots before a human reads them
 **NextRole AI** tackles all four problems in one product. Users sign in with Google, upload a PDF resume (or enter their skills manually), and Google **Gemini** returns **structured, actionable JSON** that the UI renders as score rings, match cards, downloadable reports and ready-to-print resumes.
 
 It is a production-style full-stack app with **OAuth authentication, JWT-protected APIs, a freemium usage quota, and real payments via Razorpay**.
+
+---
+
+🌐 Live Demo
+🔗 https:[live-link](https://ai-careers-five.vercel.app)
 
 ---
 
@@ -340,6 +347,17 @@ All routes except `/api/user/login` require `Authorization: Bearer <JWT>`.
 }
 ```
 </details>
+
+---
+## 📸 Screenshots
+
+| Resume Analyser | Interview Prep |
+| :---: | :---: |
+| ![S1](./frontend/src/assets/S1.png) | ![S2](./frontend/src/assets/S2.png) |
+
+| Job Matcher |  Razorpay Subscription  |
+| :---: | :---: |
+| ![S3](./frontend/src/assets/S3.png) | ![S4](./frontend/src/assets/S4.png) |
 
 ---
 
