@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import logo from "../assets/Glossy Blue Recruitment Briefcase Icon.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -9,9 +10,11 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 border-b border-white/6 bg-[#090612]/80 backdrop-blur-xl">
       <Link to={"/"} className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-emerald-400 flex caret-indigo-50 justify-center shadow-lg shadow-indigo-500/30 text-2xl">
-          📚
-        </div>
+         <img
+          src={logo}
+          alt="NextRole AI logo"
+          className="w-8 h-8 rounded-lg object-cover shadow-lg shadow-indigo-500/30"
+        />
         <span
           className="font-bold text-lg tracking-tight"
           style={{ fontFamily: "'Syne', sans-serif" }}
