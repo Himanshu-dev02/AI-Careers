@@ -6,6 +6,7 @@ import { server } from "../config";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
 import { features } from "../utils";
+import logo from "../assets/Glossy Blue Recruitment Briefcase Icon.png";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -45,9 +46,11 @@ const Login = () => {
 
       <div className="glass-card w-full max-w-md p-10 flex flex-col items-center gap-8 z-10">
         <div className="flex flex-col items-center gap-3 text-center">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-indigo-500/30 text-3xl">
-            📚
-          </div>
+          <img
+            src={logo}
+            alt="NextRole AI logo"
+            className="w-12 h-12 rounded-xl object-cover shadow-lg shadow-indigo-500/30"
+          />
           <h1 className="text-2xl font-bold tracking-tight text-gradient">
             NextRole-AI
           </h1>
